@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1366.0" style="-fx-background-color: black;" stylesheets="@fxfsupport.css" type="AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="bt_menu" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="550.0" layoutY="7.0" onMouseClicked="#menu_action" prefHeight="26.0" prefWidth="26.0" styleClass="fxf-glyph" stylesheets="@fxfsupport.css" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="2.0" />
+      <Label fx:id="about" layoutX="14.0" layoutY="6.0" onMouseClicked="#about_action" style="-fx-text-fill: white;" text="PP130 V-1.6" AnchorPane.leftAnchor="20.0" />
+      <HBox fx:id="devicebox" alignment="CENTER_RIGHT" layoutX="906.0" layoutY="-36.0" prefHeight="28.0" prefWidth="300.0" spacing="10.0" style=": white;" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="1.0" />
+      <Label fx:id="notifications" contentDisplay="RIGHT" graphicTextGap="5.0" layoutX="114.0" layoutY="7.0" maxWidth="-Infinity" prefHeight="26.0" prefWidth="50.0" style="-fx-text-fill: white;" text="0" textFill="WHITE" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="2.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="status" layoutX="208.0" layoutY="8.0" prefHeight="26.0" prefWidth="800.0" textFill="WHITE" AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="2.0" />
+      <AnchorPane fx:id="notificationbox" layoutX="120.0" layoutY="30.0" style="-fx-background-radius: 10; -fx-background-color: white;" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="30.0">
+         <children>
+            <ScrollPane prefWidth="600.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <content>
+                  <VBox fx:id="notificationlist" />
+               </content>
+            </ScrollPane>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+         <padding>
+            <Insets bottom="5.0" right="10.0" />
+         </padding>
+      </AnchorPane>
+      <AnchorPane fx:id="menubox" layoutX="1136.0" layoutY="24.0" prefWidth="220.0" style="-fx-background-color: white; -fx-background-radius: 20;" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
+         <children>
+            <Text fx:id="userid" layoutX="111.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Opus" textAlignment="CENTER" wrappingWidth="128.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0">
+               <font>
+                  <Font name="Lato-Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="21.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: gray;" text="Em operação desde :" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="logintime" layoutX="21.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: gray;" text="Segunda - 23/03/20 - 14:32:06" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="90.0">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="pass_label" layoutX="102.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Digite o código de acesso :" visible="false" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="12.0">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <PasswordField fx:id="passfield" alignment="CENTER" layoutX="69.0" layoutY="30.0" onAction="#pass_action" prefWidth="80.0" visible="false" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="33.0" />
+            <Label fx:id="avatar" layoutX="25.0" layoutY="35.0" onMouseClicked="#avatar_action" prefHeight="50.0" prefWidth="50.0" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="10.0" />
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </AnchorPane>
+   </children>
+</fx:root>

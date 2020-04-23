@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="500.0" styleClass="modal-dialog" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.opus.fxsupport.FXFImageChooserController">
+   <children>
+      <ScrollPane fx:id="scrollpane" fitToWidth="true" hbarPolicy="ALWAYS" pannable="true" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="87.0">
+         <content>
+            <HBox fx:id="icon_box" prefHeight="80.0" prefWidth="450.0" spacing="5.0" />
+         </content>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </ScrollPane>
+      <Line endX="367.5" layoutX="115.0" layoutY="51.0" startX="-100.0" style="-fx-stroke: dodgerblue;" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
+      <Text layoutX="266.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: dodgerblue;" text="Seletor de Imagens">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Text>
+      <Button fx:id="cancel_button" cancelButton="true" layoutX="202.0" layoutY="260.0" mnemonicParsing="false" onAction="#cancel_action" prefWidth="100.0" text="Cancelar" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="30.0" />
+      <RadioButton fx:id="tg_image" layoutX="26.0" layoutY="59.0" mnemonicParsing="false" selected="true" text="Imagens">
+         <toggleGroup>
+            <ToggleGroup fx:id="source_group" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="tg_iconcolor" layoutX="193.0" layoutY="59.0" mnemonicParsing="false" text="Cores Solidas" toggleGroup="$source_group" />
+      <RadioButton fx:id="tg_gradientes" layoutX="372.0" layoutY="59.0" mnemonicParsing="false" text="Gradientes" toggleGroup="$source_group" />
+      <AnchorPane fx:id="solidcolor" prefHeight="106.0" prefWidth="470.0" visible="false" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="87.0">
+         <children>
+            <ColorPicker fx:id="color_picker" layoutX="29.0" layoutY="40.0" onAction="#solidcolor_action" promptText="cb_cor" />
+            <Rectangle fx:id="screen_thumb" arcHeight="5.0" arcWidth="5.0" fill="#c1daf2" height="90.0" layoutX="274.0" layoutY="8.0" stroke="BLACK" strokeType="INSIDE" width="160.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

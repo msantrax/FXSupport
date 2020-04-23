@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--<?import com.opus.glyphs.FontAwesomeIconView?>-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root fx:id="navband" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="600.0" spacing="110.0" style="-fx-background-color: black; -fx-border-color: black;" type="HBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <children>
+      <Label fx:id="bt_back" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" onMouseClicked="#back_action" prefHeight="30.0" prefWidth="30.0" styleClass="fxf-glyph" />
+      <Label fx:id="bt_home" contentDisplay="CENTER" layoutX="310.0" layoutY="21.0" onMouseClicked="#home_action" styleClass="fxf-glyph" />
+      <Label fx:id="bt_list" layoutX="255.0" layoutY="21.0" onMouseClicked="#list_action" style="-fx-text-fill: white;" styleClass="fxf-glyph" />
+   </children>
+</fx:root>
