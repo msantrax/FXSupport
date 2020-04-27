@@ -1025,6 +1025,21 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
     public String getProfileID() {
         return "";
     }
+
+    @Override
+    public FXFCheckListViewNumber<String> getRunControl() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FXFCountdownTimer getCDT() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void resetDevices() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

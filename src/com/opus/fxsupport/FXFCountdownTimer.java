@@ -15,9 +15,12 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -59,6 +62,9 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
     private String pclock_mode = "SECONDS";
     private String sclock_mode = "SECONDS";
     
+    protected String overevent = "NULLEVENT";
+    
+    
     private VirnaServiceProvider ctrl;
     
     
@@ -87,7 +93,6 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         initGraphics(); 
     } 
-    
     
     
     public void triggerTimer(){
@@ -131,7 +136,6 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
             //LOG.info(String.format("Run took = %d msec to finish", end_ts-init_ts));
             sendEvent(null);
             setBar(0L, 0.0, 0.0);
-            
         }
     }
     
@@ -189,7 +193,8 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
         
         if (tbar == null){
             tstamp = System.currentTimeMillis();
-            ctrl.processSignal(new SMTraffic(0l, 0l, 0, "CDTEVENT", this.getClass(),
+            
+            ctrl.processSignal(new SMTraffic(0l, 0l, 0, overevent, this.getClass(),
                                     new VirnaPayload()
                                            .setString("OVERFLOW")
                                            .setLong1(tstamp)
@@ -250,29 +255,40 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
         tick_angle = timer_tick / ms_degree;
         last_angle = 0.0;
         
-        for (int i = 0; i < bars.size(); i++) { 
-            FXFCountdownTimerBar wbar = bars.get(i);
-            if (i == 0){
-                wbar.setInit_angle(0.0);
-                wbar.setEnd_angle(wbar.getDuration() / ms_degree);
-                wbar.setInit_tick(0L);
-                wbar.setEnd_tick(wbar.getDuration());
-            }
-            else{
-                FXFCountdownTimerBar lastbar = bars.get(i-1);
-                wbar.setInit_angle(lastbar.getEnd_angle());
-                wbar.setEnd_angle(wbar.getInit_angle() + (wbar.getDuration() / ms_degree));
-                wbar.setInit_tick(lastbar.getEnd_tick());
-                wbar.setEnd_tick(wbar.getInit_tick() + wbar.getDuration());
-            }
-            getChildren().add(wbar.getBar());
-        }
+        
+//        Platform.runLater(new Runnable() {
+//            @Override
+//            public void run() {
+                for (int i = 0; i < bars.size(); i++) { 
+                    FXFCountdownTimerBar wbar = bars.get(i);
+                    if (i == 0){
+                        wbar.setInit_angle(0.0);
+                        wbar.setEnd_angle(wbar.getDuration() / ms_degree);
+                        wbar.setInit_tick(0L);
+                        wbar.setEnd_tick(wbar.getDuration());
+                    }
+                    else{
+                        FXFCountdownTimerBar lastbar = bars.get(i-1);
+                        wbar.setInit_angle(lastbar.getEnd_angle());
+                        wbar.setEnd_angle(wbar.getInit_angle() + (wbar.getDuration() / ms_degree));
+                        wbar.setInit_tick(lastbar.getEnd_tick());
+                        wbar.setEnd_tick(wbar.getInit_tick() + wbar.getDuration());
+                    }
+
+                    Arc arc = wbar.getBar();
+                    ObservableList<Node> ch = getChildren();
+                    ch.add(arc);
+                }
+//            }
+//        });
+        
         return this;
     }
     
     public FXFCountdownTimer pushBar(long duration, Color color, String message, String init_event, String end_event){
         
-        bars.add(new FXFCountdownTimerBar(this, bars.size(), duration, color, message, init_event, end_event));
+        FXFCountdownTimerBar ctbar = new FXFCountdownTimerBar(this, bars.size(), duration, color, message, init_event, end_event);
+        bars.add(ctbar);
         return this;
     }
 
@@ -298,6 +314,14 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
 
     public void setCtrl(VirnaServiceProvider ctrl) {
         this.ctrl = ctrl;
+    }
+
+    public String getOverevent() {
+        return overevent;
+    }
+
+    public void setOverevent(String overevent) {
+        this.overevent = overevent;
     }
 
     

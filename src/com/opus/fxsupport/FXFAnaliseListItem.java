@@ -5,6 +5,9 @@
  */
 package com.opus.fxsupport;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 
 
 public class FXFAnaliseListItem {
@@ -39,15 +42,16 @@ public class FXFAnaliseListItem {
         this.status = status;
     }
 
-        private boolean check;
+        private BooleanProperty check;
 
-    public boolean isCheck() {
+    public BooleanProperty getCheck() {
         return check;
     }
 
-    public void setCheck(boolean check) {
+    public void setCheck(BooleanProperty check) {
         this.check = check;
     }
+
 
     
     
@@ -61,7 +65,7 @@ public class FXFAnaliseListItem {
         this.sequence = sequence;
         this.value = value;
         this.status = status;
-        this.check = check;
+        this.check = new SimpleBooleanProperty(check);
         
     }
     

@@ -81,16 +81,16 @@ abstract class CheckBitSetModelBase<T> implements IndexedCheckModel<T> {
             }
             
             if (hasRealChangeOccurred) {
-                if (c.wasAdded()){
-                    int idx = c.getAddedSubList().get(0);
-                    FXFAnaliseListItem ali = (FXFAnaliseListItem)this.getItem(idx);
-                    ali.setCheck(true);
-                }
-                else if (c.wasRemoved()){
-                    int idx = c.getRemoved().get(0);
-                    FXFAnaliseListItem ali = (FXFAnaliseListItem)this.getItem(idx);
-                    ali.setCheck(false);
-                }
+//                if (c.wasAdded()){
+//                    int idx = c.getAddedSubList().get(0);
+//                    FXFAnaliseListItem ali = (FXFAnaliseListItem)this.getItem(idx);
+//                    ali.setCheck(true);
+//                }
+//                else if (c.wasRemoved()){
+//                    int idx = c.getRemoved().get(0);
+//                    FXFAnaliseListItem ali = (FXFAnaliseListItem)this.getItem(idx);
+//                    ali.setCheck(false);
+//                }
                 
                 c.reset();
                 checkedItemsList.callObservers(new MappingChange<>(c, map, checkedItemsList));
@@ -255,7 +255,7 @@ abstract class CheckBitSetModelBase<T> implements IndexedCheckModel<T> {
             final int index = i;
             final T item = getItem(index);
             FXFAnaliseListItem ali =  (FXFAnaliseListItem) item;
-            final BooleanProperty booleanProperty = new SimpleBooleanProperty(item, "selected", ali.isCheck());
+            final BooleanProperty booleanProperty = new SimpleBooleanProperty(item, "selected", ali.getCheck().get());
             
             itemBooleanMap.put(item, booleanProperty);
             

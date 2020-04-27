@@ -58,8 +58,6 @@ public class FXFWindowManager {
     
     private FXFControllerInterface activefxcontroller;
     
-    
-    
     private ArrayList<TextFlow> notifications;
     
     
@@ -259,8 +257,8 @@ public class FXFWindowManager {
                 activefxcontroller.activateModel();
                 
                 stage.setScene(wd.getScene());
-                stage.setFullScreen(true);
-                stage.setFullScreenExitHint("");
+//                stage.setFullScreen(true);
+//                stage.setFullScreenExitHint("");
                 
                 stage.show();
             }
@@ -275,6 +273,7 @@ public class FXFWindowManager {
                 wd.setRootpane(rootpane);
                 wd.getFxcontroller().setAppController(ctrl);
                 activefxcontroller = wd.getFxcontroller();
+                activefxcontroller.activateModel();
                 
                 headerband = new FXFHeaderband();
                 headerband.setAppController(ctrl);
@@ -304,8 +303,8 @@ public class FXFWindowManager {
                 
                 
                 stage.setScene(scene);
-                stage.setFullScreen(true);
-                stage.setFullScreenExitHint("");
+                //stage.setFullScreen(true);
+                //stage.setFullScreenExitHint("");
                 
                 stage.show();   
             }

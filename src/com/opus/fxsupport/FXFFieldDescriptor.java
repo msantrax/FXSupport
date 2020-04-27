@@ -34,6 +34,10 @@ public class FXFFieldDescriptor {
     
     private String local_callback = "";
     
+    protected Object custom = new Object();
+    protected String custom_classtype = "";
+    
+    
     private String format = "%5.2f";
     protected String unit = "";
     private String default_value = "0.0";
@@ -299,6 +303,22 @@ public class FXFFieldDescriptor {
 
     public void setRegex(String regex) {
         this.regex = regex;
+    }
+
+    public Object getCustom() {
+        return custom;
+    }
+
+    public void setCustom(Object custom) {
+        this.custom = custom;
+    }
+
+    public String getCustom_classtype() {
+        return custom_classtype;
+    }
+
+    public void setCustom_classtype(String custom_classtype) {
+        this.custom_classtype = custom_classtype;
     }
 
     

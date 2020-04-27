@@ -22,7 +22,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
@@ -114,9 +113,31 @@ public class FXFController implements FXFControllerInterface {
                         String fname = name;
                         field.setManagement(this, focus, wctx);
                         templist.put(focus, wd);
-//                        String mes = String.format("Registering Key: %s -> %d / type=%s", name, focus, obj.toString());
-//                        LOG.info(mes);
+                        String mes = String.format("Registering Key: %s -> %d / type=%s", name, focus, obj.toString());
+                        LOG.info(mes);
                     }
+//                    else if (obj instanceof FXFBlaineDeviceController){
+//                        FXFBlaineDeviceController field = (FXFBlaineDeviceController)obj;
+//                        int focus;
+//                        WidgetDescriptor wd;
+//                        
+//                        if (field.getFocusPosition() == null || field.getFocusPosition() == 0){
+//                            focus = getNextOutFocusCounter();
+//                            wd = new WidgetDescriptor(focus, field);
+//                            wd.enter_focusable = false;
+//                        }
+//                        else{
+//                            focus = field.getFocusPosition();
+//                            wd = new WidgetDescriptor(focus, field);
+//                        }
+//                        
+//                        wd.name = name;
+//                        String fname = name;
+//                        field.setManagement(this, focus, wctx);
+//                        templist.put(focus, wd);
+//                        String mes = String.format("Registering CUSTOM Baline Device: %s -> %d / type=%s", name, focus, obj.toString());
+//                        LOG.info(mes);
+//                    }
                 }
             }
         });
@@ -257,9 +278,6 @@ public class FXFController implements FXFControllerInterface {
             fxfd.setAcbinding(TextFields.bindAutoCompletion((TextField)fxfd.getField(), fxfd.getAcbindinglist()));   
         }
     }
-    
-    
-    
     
     
     
@@ -449,6 +467,21 @@ public class FXFController implements FXFControllerInterface {
     @Override
     public String getProfileID() {
         return profileid;
+    }
+
+    @Override
+    public FXFCheckListViewNumber<String> getRunControl() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FXFCountdownTimer getCDT() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void resetDevices() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -339,6 +339,17 @@
 }
 
 
+.fxf-led {
+    -fx-background-radius : 10;
+    
+}
+
+
+
+
+
+
+
 .modal-dialog {
    /*-fx-background-color: linear-gradient(to bottom, lightyellow, derive(white, 20%));*/ 
    -fx-background-radius: 30;

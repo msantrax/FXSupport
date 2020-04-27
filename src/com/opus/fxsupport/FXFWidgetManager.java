@@ -100,6 +100,7 @@ public class FXFWidgetManager {
                         String fname = name;
                         field.setManagement(ctrl, focus, wctx);
                         templist.put(focus, wd);
+                        
                         String mes = String.format("Registering Key: %s -> %d / type=%s", name, focus, obj.toString());
                         LOG.info(mes);
                     }

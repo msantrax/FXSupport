@@ -26,8 +26,12 @@ public interface FXFControllerInterface {
     
     public void update();
     public void update(Scene scene);
+    public void resetDevices();
     
     public void setAppController (VirnaServiceProvider ctrl);
+    
+    public FXFCheckListViewNumber<String> getRunControl();
+    public FXFCountdownTimer getCDT();
     
     public SystemMenu getMenu(boolean isadm);
     
