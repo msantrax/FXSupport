@@ -19,6 +19,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -37,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 
 
 
@@ -77,6 +80,15 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
     
     @FXML
     private Label status;
+    
+    
+    @FXML
+    private AnchorPane snack;
+
+    @FXML
+    private Text snacktext;
+
+    
     
     
     @FXML
@@ -275,6 +287,21 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
               }    
         });  
     }
+    
+    
+    public void showSnack(String message) {
+        
+        snack.setVisible(true);
+        
+        snacktext.setText(message);
+        Timeline timeline = new Timeline(new KeyFrame(
+            Duration.millis(2500),
+            ae -> snack.setVisible(false)
+        ));
+        timeline.play();
+        
+    }
+    
     
     
     private SystemMenu ctxm;

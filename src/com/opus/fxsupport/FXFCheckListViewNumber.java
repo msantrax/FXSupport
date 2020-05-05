@@ -24,13 +24,19 @@ import javafx.scene.control.cell.CheckBoxListCell;
 
 public class FXFCheckListViewNumber <T> extends ListView<T>{
 
+    
+
     private static final Logger LOG = Logger.getLogger(FXFCheckListViewNumber.class.getName());
     
     private VirnaServiceProvider appctrl;
     
     private ObservableList<FXFAnaliseListItem> list_entries = FXCollections.observableArrayList();
  
-    private boolean skipfirst = true;
+    protected boolean skipfirst = true;
+    
+    
+    protected Double average = 0.0;
+    protected Double rsd = 0.001;
     
     
     public FXFCheckListViewNumber() {
@@ -66,9 +72,9 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
     private void updateStatus() {
         
         int num = 0;
-        double average = 0.0;
+        average = 0.0;
         double dif = 0.0;
-        double rsd = 0.0;
+        rsd = 0.0;
         final ArrayList<Double> values = new ArrayList<>();
         
         
@@ -81,26 +87,26 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
             // Calculate Average
             for (Double ivl : values){
                 if (ivl != 0.0){
-                    average += ivl;
+                    setAverage((Double) (getAverage() + ivl));
                     num++;
                 }
             }
-            average = average / num;
+            setAverage((Double) getAverage() / num);
             // Calculate RSD
             for (double vl : values){
                 if (vl != 0.0){
-                    dif += Math.pow(vl-average, 2);
+                    dif += Math.pow(vl-getAverage(), 2);
                 }    
             }
             dif = dif / num;     
             Double rawrsd = Math.sqrt(dif);
-            rsd = rawrsd;
-            rsd = (rsd /average) * 100;
-            if (rsd == 0.0) rsd = 0.001;
+            setRsd(rawrsd);
+            setRsd((Double) (getRsd() / getAverage()) * 100);
+            if (getRsd() == 0.0) setRsd((Double) 0.001);
             appctrl.processSignal(new SMTraffic(0l, 0l, 0, "ENDRUN", this.getClass(),
                                    new VirnaPayload()
-                                           .setObject(average)
-                                           .setAuxiliar(rsd)
+                                           .setObject(getAverage())
+                                           .setAuxiliar(getRsd())
                                            .setFlag1(true)
             ));
         }
@@ -138,12 +144,13 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
         });
     }
     
+    
     public void addEntry (Double value, String status){
         
         FXFAnaliseListItem ai;
         int index = list_entries.size()+1;
         
-        if (skipfirst && index == 1){
+        if (isSkipfirst() && index == 1){
             ai = new FXFAnaliseListItem(index,value, "Preliminar", false);
         }
         else{
@@ -192,8 +199,29 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
         return ai.getCheck();
     }
     
+     public boolean isSkipfirst() {
+        return skipfirst;
+    }
+
+    public void setSkipfirst(boolean skipfirst) {
+        this.skipfirst = skipfirst;
+    }
     
-    
+    public Double getAverage() {
+        return average;
+    }
+
+    public void setAverage(Double average) {
+        this.average = average;
+    }
+
+    public Double getRsd() {
+        return rsd;
+    }
+
+    public void setRsd(Double rsd) {
+        this.rsd = rsd;
+    }
     
     
     
@@ -218,34 +246,35 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
     
     
  
-    protected static class CheckListViewBitSetCheckModel<T> extends CheckBitSetModelBase<T> {
-        
-        private final ObservableList<T> items;
-     
-        CheckListViewBitSetCheckModel(final ObservableList<T> items, final Map<T, BooleanProperty> itemBooleanMap) {
-            super(itemBooleanMap);
-            
-            this.items = items;
-            this.items.addListener((ListChangeListener<T>) c -> updateMap());
-            
-            updateMap();
-        }
-       
-        
-        @Override public T getItem(int index) {
-            return items.get(index);
-        }
-        
-        @Override public int getItemCount() {
-            return items.size();
-        }
-        
-        @Override public int getItemIndex(T item) {
-            return items.indexOf(item);
-        }
-        
-    }
-    
+//    protected static class CheckListViewBitSetCheckModel<T> extends CheckBitSetModelBase<T> {
+//        
+//        private final ObservableList<T> items;
+//     
+//        CheckListViewBitSetCheckModel(final ObservableList<T> items, final Map<T, BooleanProperty> itemBooleanMap) {
+//            super(itemBooleanMap);
+//            
+//            this.items = items;
+//            this.items.addListener((ListChangeListener<T>) c -> updateMap());
+//            
+//            updateMap();
+//        }
+//       
+//        
+//        @Override public T getItem(int index) {
+//            return items.get(index);
+//        }
+//        
+//        @Override public int getItemCount() {
+//            return items.size();
+//        }
+//        
+//        @Override public int getItemIndex(T item) {
+//            return items.indexOf(item);
+//        }
+//        
+//    }
+
+   
     
     
     

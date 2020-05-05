@@ -204,6 +204,9 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
 
     }
     
+    
+    
+    
     private MenuItem getContextMenuLabel (String mes, boolean title){
         
         MenuItem labelitem = new MenuItem(mes);
@@ -1038,6 +1041,11 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
 
     @Override
     public void resetDevices() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FXFBlaineDeviceController getBlaineDevice() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

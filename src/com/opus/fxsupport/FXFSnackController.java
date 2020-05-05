@@ -51,7 +51,10 @@ public class FXFSnackController extends AnchorPane {
     
     
     private Stage stage;
-    public void setStage (Stage stage) { this.stage = stage;}
+    public void setStage (Stage stage) { 
+        this.stage = stage;
+
+    }
     
     private void closeStage(ActionEvent event) {
         Node  source = (Node)  event.getSource(); 

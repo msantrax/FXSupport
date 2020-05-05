@@ -6,10 +6,13 @@
 package com.opus.fxsupport;
 
 import com.opus.syssupport.PicnoUtils;
+import com.opus.syssupport.SMTraffic;
+import com.opus.syssupport.VirnaPayload;
 import com.opus.syssupport.VirnaServiceProvider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -34,10 +37,7 @@ import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 import org.controlsfx.validation.ValidationSupport;
 
-/**
- *
- * @author opus
- */
+
 public class FXFController implements FXFControllerInterface {
 
     private static final Logger LOG = Logger.getLogger(FXFController.class.getName());
@@ -52,6 +52,9 @@ public class FXFController implements FXFControllerInterface {
     
     protected String profileid;
 
+    public static VirnaServiceProvider sctrl;
+    
+    
     public FXFController() {
                
     }
@@ -113,31 +116,9 @@ public class FXFController implements FXFControllerInterface {
                         String fname = name;
                         field.setManagement(this, focus, wctx);
                         templist.put(focus, wd);
-                        String mes = String.format("Registering Key: %s -> %d / type=%s", name, focus, obj.toString());
-                        LOG.info(mes);
-                    }
-//                    else if (obj instanceof FXFBlaineDeviceController){
-//                        FXFBlaineDeviceController field = (FXFBlaineDeviceController)obj;
-//                        int focus;
-//                        WidgetDescriptor wd;
-//                        
-//                        if (field.getFocusPosition() == null || field.getFocusPosition() == 0){
-//                            focus = getNextOutFocusCounter();
-//                            wd = new WidgetDescriptor(focus, field);
-//                            wd.enter_focusable = false;
-//                        }
-//                        else{
-//                            focus = field.getFocusPosition();
-//                            wd = new WidgetDescriptor(focus, field);
-//                        }
-//                        
-//                        wd.name = name;
-//                        String fname = name;
-//                        field.setManagement(this, focus, wctx);
-//                        templist.put(focus, wd);
-//                        String mes = String.format("Registering CUSTOM Baline Device: %s -> %d / type=%s", name, focus, obj.toString());
+//                        String mes = String.format("Registering Key: %s -> %d / type=%s", name, focus, obj.toString());
 //                        LOG.info(mes);
-//                    }
+                    }
                 }
             }
         });
@@ -154,15 +135,15 @@ public class FXFController implements FXFControllerInterface {
     public int getNextOutFocusCounter() { return (++outfocus_counter) + 900 ;}
     
     
-    public FXFField getWidget(String name){
+    public <T>T getWidget(String name, Class<T> clazz){
    
         WidgetDescriptor wd = wctx.findByName(name);
         if (wd != null){
-            FXFField field = (FXFField)wd.node;
-            return field;
+            return (T)wd.node;
         }
         return null;
     }
+    
     
     public WidgetDescriptor getWidgetDescriptor(String name){
       
@@ -275,7 +256,7 @@ public class FXFController implements FXFControllerInterface {
             if (fxfd.getAcbinding() != null){
                 fxfd.getAcbinding().dispose();
             }
-            fxfd.setAcbinding(TextFields.bindAutoCompletion((TextField)fxfd.getField(), fxfd.getAcbindinglist()));   
+            fxfd.setAcbinding(TextFields.bindAutoCompletion((TextField)fxfd.getField(FXFField.class), fxfd.getAcbindinglist()));   
         }
     }
     
@@ -390,7 +371,9 @@ public class FXFController implements FXFControllerInterface {
         return ctxm;
     }
     
-    public static Double convertDouble(String value, String message, Double vdefault){
+    public static Double convertToDouble(String value, String message, Double vdefault){
+        
+        String mes = (message == null) ? "Ooops ! - O valor digitado não é um numero." : message; 
         
         try{
             String svalue = value.replace(',', '.');
@@ -398,13 +381,67 @@ public class FXFController implements FXFControllerInterface {
             return dvalue;
         }
         catch (Exception ex){
-            FXFWindowManager wm = FXFWindowManager.getInstance();
-            wm.showSnack(String.format(message, value));
+            FXFHeaderband hb = FXFWindowManager.getInstance().getHeaderBand();
+            hb.showSnack(String.format(mes, value));
+            return vdefault;
+        }
+    }
+    
+    public static String convertFromDouble(Double value, String message, String vdefault){
+        
+        if (message == null) message = "Erro na conversão de valor em ponto flutuante - Campo é nulo !";
+        
+        if (value != null){
+            return String.valueOf(value);
+        }
+        else{
+            sctrl.processSignal(new SMTraffic(0l, 0l, 0, "ADD_NOTIFICATION", FXFController.class,
+                           new VirnaPayload().setString(
+                                "Conversor de unidades&" + "INFO&" +
+                                String.format("%s&", message) +
+                                "void"        
+                           )
+            ));
             return vdefault;
         }
     }
     
     
+    public static Integer convertToInteger(String value, String message, Integer vdefault){
+        
+        String mes = (message == null) ? "Ooops ! - O valor digitado não é um numero." : message; 
+        
+        try{
+            String svalue = value.replace(',', '.');
+            Integer dvalue = Integer.valueOf(svalue);
+            return dvalue;
+        }
+        catch (Exception ex){
+            FXFHeaderband hb = FXFWindowManager.getInstance().getHeaderBand();
+            hb.showSnack(String.format(mes, value));
+            return vdefault;
+        }
+    }
+    
+    
+    public static String convertFromInteger(Integer value, String message, String vdefault){
+        
+        if (message == null) message = "Erro na conversão de valor numeral - Campo é nulo !";
+        
+        if (value != null){
+            return String.valueOf(value);
+        }
+        else{
+            sctrl.processSignal(new SMTraffic(0l, 0l, 0, "ADD_NOTIFICATION", FXFController.class,
+                           new VirnaPayload().setString(
+                                "Conversor de unidades&" + "INFO&" +
+                                String.format("%s&", message) +
+                                "void"        
+                           )
+            ));
+            return vdefault;
+        }
+    }
     
     
     // ================================================= Implementations =========================================================
@@ -482,6 +519,19 @@ public class FXFController implements FXFControllerInterface {
     @Override
     public void resetDevices() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FXFBlaineDeviceController getBlaineDevice() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
     
     

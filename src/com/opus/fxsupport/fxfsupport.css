@@ -339,13 +339,43 @@
 }
 
 
-.fxf-led {
+/* LEDS ============================================= */
+
+.fxf-ledfail-off{
     -fx-background-radius : 10;
-    
+    -fx-background-color : darkred;
+    -fx-text-fill : orange;
 }
 
+.fxf-ledfail-on{
+    -fx-background-radius : 10;
+    -fx-background-color : radial-gradient(focus-angle 0deg , focus-distance 0% , center 50% 50% , radius 63% , orange, darkred);
+    -fx-text-fill : white;
+}
 
+.fxf-ledcharge-off{
+    -fx-background-radius : 10;
+    -fx-background-color : darkblue;
+    -fx-text-fill : dodgerblue;
+}
 
+.fxf-ledcharge-on{
+    -fx-background-radius : 10;
+    -fx-background-color : radial-gradient(focus-angle 0deg , focus-distance 0% , center 50% 50% , radius 63% , dodgerblue, darkblue);
+    -fx-text-fill : white;
+}
+
+.fxf-ledfinal-off{
+    -fx-background-radius : 10;
+    -fx-background-color : darkgreen;
+    -fx-text-fill : green;
+}
+
+.fxf-ledfinal-on{
+    -fx-background-radius : 10;
+    -fx-background-color : radial-gradient(focus-angle 0deg , focus-distance 0% , center 50% 50% , radius 63% , limegreen, darkgreen);
+    -fx-text-fill : white;
+}
 
 
 
@@ -364,8 +394,10 @@
   -fx-background-radius: 10;
 }
 
+
+
 .modal-dialog .button {
-  -fx-background-color: white;
+  -fx-background-color: dodgerblue;
   -fx-background-radius: 10;
   -fx-border-color: gray;
   -fx-border-radius: 10;

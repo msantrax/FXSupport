@@ -6,6 +6,7 @@
 package com.opus.fxsupport;
 
 import java.util.ArrayList;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 
@@ -15,7 +16,8 @@ import org.controlsfx.control.textfield.AutoCompletionBinding;
  */
 public class FXFFieldDescriptor {
 
-    private transient FXFField field;
+    private transient Object field;
+    
     
     private String name = "";
     private String tooltip_message = "Default Tooltip Message";
@@ -67,11 +69,11 @@ public class FXFFieldDescriptor {
       
     }
     
-    public FXFField getField() {
-        return field;
+    public <T>T getField( Class<T> clazz) {
+        return (T)field;
     }
 
-    public void setField(FXFField field) {
+    public void setField(Object field) {
         this.field = field;
     }
     

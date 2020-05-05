@@ -95,6 +95,20 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
     } 
     
     
+    public void clearCounter(){
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                timer.stop();
+                running = false;
+                clearBars();
+                PClock.setText("0000:00");
+                SClock.setText("Aguardando");
+            }
+        });
+    }
+    
     public void triggerTimer(){
         
         //String mes = "Changed timer to : %s";
@@ -147,7 +161,7 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
                 sendEvent(tbar);
             }
             PClock.setText(formatPClock(System.currentTimeMillis()-init_ts));
-            //SClock.setText(formatSClock(tick, tbar.getInit_tick(), duration -(System.currentTimeMillis()-init_ts)));
+            SClock.setText(formatSClock(tick, tbar.getInit_tick(), duration -(System.currentTimeMillis()-init_ts)));
             tbar.updateBar(init, lenght);
         }
         
@@ -234,10 +248,12 @@ public class FXFCountdownTimer extends AnchorPane implements Initializable{
     
     public FXFCountdownTimer clearBars(){
         
+        //ObservableList<Node> c = getChildren(); 
         for (FXFCountdownTimerBar tbar : bars){
-            getChildren().remove(tbar);
+            getChildren().remove(tbar.getBar());
         }
         bars.clear();
+        
         return this;
     }
     

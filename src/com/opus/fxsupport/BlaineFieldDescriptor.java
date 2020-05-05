@@ -56,6 +56,19 @@ public class BlaineFieldDescriptor {
         this.interrun = interrun;
     }
 
+        private Double auto_timeout;
+
+    public Double getAuto_timeout() {
+        return auto_timeout;
+    }
+
+    public void setAuto_timeout(Double auto_timeout) {
+        this.auto_timeout = auto_timeout;
+    }
+
+
+    
+    
         private Double an_timeout = 200.0;
 
     public Double getAn_timeout() {
@@ -66,6 +79,55 @@ public class BlaineFieldDescriptor {
         this.an_timeout = an_timeout;
     }
 
+    
+    
+    
+    
+        private transient Double target = 150.0;
+
+    public Double getTarget() {
+        return target;
+    }
+
+    public void setTarget(Double target) {
+        this.target = target;
+    }
+
+        private transient Double targetlow = 140.0;
+
+    public Double getTargetlow() {
+        return targetlow;
+    }
+
+    public void setTargetlow(Double targetlow) {
+        this.targetlow = targetlow;
+    }
+
+        private transient Double targethigh = 160.0;
+
+    public Double getTargethigh() {
+        return targethigh;
+    }
+
+    public void setTargethigh(Double targethigh) {
+        this.targethigh = targethigh;
+    }
+
+    
+        private transient Double targetRSD = 0.8;
+
+    public Double getTargetRSD() {
+        return targetRSD;
+    }
+
+    public void setTargetRSD(Double targetRSD) {
+        this.targetRSD = targetRSD;
+    }
+
+    
+    
+    
+    
     public BlaineFieldDescriptor() {
     }
 

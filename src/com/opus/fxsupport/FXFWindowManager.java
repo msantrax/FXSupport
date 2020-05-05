@@ -5,6 +5,7 @@
  */
 package com.opus.fxsupport;
 
+import static com.opus.fxsupport.FXFWindowManager.stage;
 import com.opus.syssupport.ActivitiesMap;
 import com.opus.syssupport.ActivityDescriptor;
 import com.opus.syssupport.PicnoUtils;
@@ -24,6 +25,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -409,6 +411,7 @@ public class FXFWindowManager {
         return "FXFImageChooser failed";
     }
     
+    
     public String showAutoCompleteEditorDialog(FXFFieldDescriptor fxfd){
         
         try {
@@ -441,41 +444,92 @@ public class FXFWindowManager {
         return "FXFAutocompleteEditor failed";
     }
     
-  
-    public void showSnack(String message){
+    
+    
+    
+    public String showInputDialog(String header, String defaultvalue){
         
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFSnack.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFInputDialog.fxml"));
             Parent parent = fxmlLoader.load();
-            FXFSnackController SnackController = fxmlLoader.<FXFSnackController>getController();
+            FXFInputDialogController ICController = fxmlLoader.<FXFInputDialogController>getController();
             
             
             Scene scene = new Scene(parent); 
             scene.setFill(Color.TRANSPARENT);
             scene.getStylesheets().add("com/opus/fxsupport/fxfsupport.css");
             
+            
             Stage dlgstage = new Stage(StageStyle.TRANSPARENT);            
             dlgstage.initModality(Modality.WINDOW_MODAL);
             dlgstage.initOwner(stage);
             
             dlgstage.setScene(scene);
-            SnackController.setStage(dlgstage);
-            SnackController.setmessage(message);
+            ICController.setStage(dlgstage);
+            ICController.setHeader(header);
+            ICController.setDefvalue(defaultvalue);
             
             //stage.getScene().getRoot().setEffect(new BoxBlur());
             dlgstage.showAndWait();
             
+            return ICController.getResult();
+            
         } catch (IOException ex) {
             Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-     
+        
+        return "FXFInputDialog failed";
     }
-    
-    
-    
+  
     
     
 }
+
+
+
+//    
+//    public void showSnack(String message){
+//        
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFSnack.fxml"));
+//            Parent parent = fxmlLoader.load();
+//            FXFSnackController SnackController = fxmlLoader.<FXFSnackController>getController();
+//            
+//            Scene scene = new Scene(parent); 
+//            scene.setFill(Color.TRANSPARENT);
+//            scene.getStylesheets().add("com/opus/fxsupport/fxfsupport.css");
+//            
+//            
+//            Stage dlgstage = new Stage(StageStyle.TRANSPARENT);            
+//            dlgstage.initModality(Modality.WINDOW_MODAL);
+//            dlgstage.initOwner(stage);
+//            
+//            
+//            dlgstage.setScene(scene);
+//            SnackController.setStage(dlgstage);
+//            SnackController.setmessage(message);
+//            
+//            //stage.getScene().getRoot().setEffect(new BoxBlur());
+//            
+//            
+////            dlgstage.setMaxWidth(500.0);
+////            dlgstage.setMaxHeight(100.0);
+//            
+//            dlgstage.showAndWait();
+//            
+//        } catch (IOException ex) {
+//            Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//     
+//    }
+//    
+    
+
+
+
+
+
+
 
 
 

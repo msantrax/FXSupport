@@ -123,8 +123,9 @@ public class FXFTextField extends CustomTextField implements FXFField{
         fieldtype.setOnAction((event) -> {
             ctxm.hide();
             if (!tf.isEditable() || fxfd.isLocked()){
-                FXFWindowManager wm = FXFWindowManager.getInstance();
-                wm.showSnack("Ooops! - Esse campo é usado em rotinas de cálculo e deve ser numérico.");
+                FXFHeaderband hb = FXFWindowManager.getInstance().getHeaderBand();
+                hb.showSnack("Ooops! - Esse campo é usado em rotinas de cálculo e deve ser numérico.");
+                //String result = wm.showAutoCompleteEditorDialog(fxfd);
             }
             else{
                 fxfd.setValidator_type(FXFController.lfieldtypes.get((String)fieldtype.getValue()));
@@ -298,7 +299,7 @@ public class FXFTextField extends CustomTextField implements FXFField{
         rangeitem.setOnAction((event) -> {
             ctxm.hide();
             if (!srangeitem.equals(rangeitem.getText())){
-                Double dvalue = FXFController.convertDouble(rangeitem.getText(), 
+                Double dvalue = FXFController.convertToDouble(rangeitem.getText(), 
                     "O valor [ %s ] não é apropriado a esse campo.", 
                     fxfd.getRanges()[index]);
                 fxfd.getRanges()[index] = dvalue;
@@ -312,6 +313,10 @@ public class FXFTextField extends CustomTextField implements FXFField{
                         fxfd.getRanges()[2] = fxfd.getRanges()[1] + 40.0 ;
                     }
                 }
+                
+                BlaineDevice bd = BlaineDevice.getInstance();
+                bd.updateProfile();
+                
                 refreshField(field,fxfd);
             }  
         });

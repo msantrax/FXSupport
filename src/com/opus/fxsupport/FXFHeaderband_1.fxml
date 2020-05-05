@@ -72,17 +72,5 @@
             <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </AnchorPane>
-      <AnchorPane fx:id="snack" layoutX="434.0" layoutY="245.0" prefWidth="507.0" styleClass="modal-snack" visible="false">
-         <children>
-            <Text fx:id="snacktext" fill="#f8f4f4" layoutX="31.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="450.0" AnchorPane.topAnchor="18.0">
-               <font>
-                  <Font name="Roboto" size="18.0" />
-               </font>
-            </Text>
-         </children>
-         <padding>
-            <Insets bottom="15.0" />
-         </padding>
-      </AnchorPane>
    </children>
 </fx:root>
