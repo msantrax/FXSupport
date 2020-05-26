@@ -145,6 +145,18 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
     }
     
     
+    public void addEntry (String value){
+        
+        FXFAnaliseListItem ai;
+        int index = list_entries.size()+1;
+        value = value.replace(',', '.');
+        Double d = Double.parseDouble(value);
+        ai = new FXFAnaliseListItem(index, d, "Carregada de Arquivo", true);
+        list_entries.add(ai);
+        
+    }
+    
+    
     public void addEntry (Double value, String status){
         
         FXFAnaliseListItem ai;
@@ -169,8 +181,7 @@ public class FXFCheckListViewNumber <T> extends ListView<T>{
             LOG.info(String.format("Now calculating to %d items", checked_items.size()));
         }
         updateStatus();
-        
-        
+     
         
     }
     

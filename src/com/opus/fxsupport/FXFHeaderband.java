@@ -22,17 +22,21 @@ import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -88,12 +92,22 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
     @FXML
     private Text snacktext;
 
-    
+    @FXML
+    private AnchorPane inputdialog;
     
     
     @FXML
     private AnchorPane menubox;
 
+    @FXML
+    private AnchorPane acvtlist;
+
+    @FXML
+    private HBox snap_box; 
+    
+    @FXML
+    private ScrollPane acvt_scroll;
+    
     
     @FXML
     private Text userid;
@@ -150,13 +164,72 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
     @FXML
     void about_action(MouseEvent event) {
         LOG.info(String.format(String.format("About requested")));
-        ctrl.processSignal(new SMTraffic(0l, 0l, 0, "ADD_NOTIFICATION", this.getClass(),
-                           new VirnaPayload().setString(
-                                "Headerband&" + "INFO&" +
-                                String.format("Test num : %d&", System.currentTimeMillis()) +
-                                "void"        
-                           )
+        
+        
+        
+        
+        
+        
+//        ctrl.processSignal(new SMTraffic(0l, 0l, 0, "ADD_NOTIFICATION", this.getClass(),
+//                           new VirnaPayload().setString(
+//                                "Headerband&" + "INFO&" +
+//                                String.format("Test num : %d&", System.currentTimeMillis()) +
+//                                "void"        
+//                           )
+//        ));
+        
+        ctrl.processSignal(new SMTraffic(0l, 0l, 0, "TESTCALC", this.getClass(),
+                           new VirnaPayload()
         ));
+
+
+        
+//        SimpleStringProperty result = showQuestionDialog("Controle das Análises", 
+//                new DialogMessageBuilder()
+//                        //.setHeight(400.0)
+//                        .enableButton("ok", "Armazenar", "armazenar", true)
+//                        .enableButton("cancel", "Descartar", "descartar", true)
+//                        .enableButton("aux", "Cancelar", "cancelar", true)
+//                        .add("Essa ultima análise ainda não foi armazenada.\n", "-fx-font-size: 16px;")
+//                        .add("Você poderá tomar as seguintes atitudes.\n", "")
+//                        .addSpacer(0)
+//                        .add("\t\u2022 Descartar os resultados e iniciar nova análise.\n", "")
+//                        .add("\t\u2022 Armazenar essa análise e iniciar uma nova.\n", "")
+//                        .add("\t\u2022 Cancelar a operação.", "")
+//   
+//        );
+        
+//        SimpleStringProperty result = showListDialog("Escolha o arquivo a carregar", 
+//                new FXFListDialogBuilder()
+//                        .enableButton("cancel", "Cancelar", "cancel", true)
+//                        .addFiles("/home/acp/PP200/Export", "absolute", "")
+//        );
+//        
+        
+//        FXFListDialogBuilder ldb = new FXFListDialogBuilder();
+//        try {
+//            ArrayList<String> files = PicnoUtils.scanDir("/home/acp/PP200/Export", "");
+//            
+//            LOG.info("Files loaded");
+//        } catch (IOException ex) {
+//            Logger.getLogger(FXFHeaderband.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+//        if (result != null){
+//            result.addListener(new ChangeListener<String>() {
+//                @Override
+//                public void changed(ObservableValue <? extends String> prop, String ov, String nv) {
+//                    LOG.info(String.format("Valor : %s ", nv));
+//                    hideInputDialog();
+//                }
+//            });
+//        }
+
+
+
+
+        //System.exit(0);
+        
     }
     
     public void updateAvatar (boolean su){
@@ -232,6 +305,24 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
         updateNotificationIcon();
         notificationbox.setVisible(false);
        
+      
+        snap_box.setOnScroll(event -> {
+            if(event.getDeltaX() == 0 && event.getDeltaY() != 0) {
+                acvt_scroll.setHvalue(acvt_scroll.getHvalue() - (event.getDeltaY() * 2) / this.snap_box.getWidth());
+            }
+        });
+        
+        
+        
+        acvtlist.setOnMouseExited(new EventHandler<MouseEvent>(){
+            @Override 
+            public void handle(MouseEvent event) {
+                //LOG.info(String.format("Notifications box exit"));
+                if (acvtlist.isVisible()){
+                    acvtlist.setVisible(false);
+                }
+            }  
+        });  
         
         
         // Menu Services ==================================================================================
@@ -276,17 +367,21 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
     
     public void updateStatus(String message){
         
-         Platform.runLater(new Runnable() {
-              @Override
-              public void run() {
-                try {
-                   status.setText(message); 
-                } catch (Exception ex) {
-                    LOG.severe("Failed to run update staus later...");
-                }
-              }    
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+              try {
+                 status.setText(message); 
+              } catch (Exception ex) {
+                  LOG.severe("Failed to run update staus later...");
+              }
+            }    
         });  
     }
+    
+    public AnchorPane getAcvtList() { return acvtlist;}
+    public HBox getSnapBox(){ return snap_box;}
+    
     
     
     public void showSnack(String message) {
@@ -301,6 +396,91 @@ public class FXFHeaderband extends AnchorPane implements FXFField{
         timeline.play();
         
     }
+    
+    public Parent currentdlgpane;
+    public AnchorPane getInputDialog() { return inputdialog;}
+    
+    public void hideInputDialog(){    
+        inputdialog.getChildren().remove(currentdlgpane);
+        inputdialog.setVisible(false);
+    }
+    
+    
+    public SimpleStringProperty showInputDialog(String header, String value){
+        
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFInputDialog.fxml"));
+            currentdlgpane = fxmlLoader.load();
+            FXFInputDialogController dlgc = fxmlLoader.<FXFInputDialogController>getController();
+            
+            dlgc.setHeader(header);
+            dlgc.setDefvalue(value);
+            
+            inputdialog.getChildren().add(currentdlgpane);
+            inputdialog.setVisible(true);
+            return dlgc.result;
+      
+        } catch (IOException ex) {
+            Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return null;
+    }
+    
+    public SimpleStringProperty showQuestionDialog(String header, DialogMessageBuilder dmb){
+        
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFQuestionDialog.fxml"));
+            currentdlgpane = fxmlLoader.load();
+            FXFQuestionDialogController dlgc = fxmlLoader.<FXFQuestionDialogController>getController();
+            
+            dlgc.setHeader(header);
+            dlgc.setStatus(dmb);
+            AnchorPane ap = (AnchorPane)currentdlgpane;
+            ap.setPrefHeight(dlgc.getDlg_height());
+            
+            inputdialog.getChildren().add(currentdlgpane);
+            inputdialog.setVisible(true);
+            //inputdialog.setPrefHeight(400);
+            return dlgc.result;
+      
+        } catch (IOException ex) {
+            Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return null;
+    }
+    
+    public SimpleStringProperty showListDialog(String header, FXFListDialogBuilder dmb){
+        
+        
+        
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFListDialog.fxml"));
+            currentdlgpane = fxmlLoader.load();
+            FXFListDialogController dlgc = fxmlLoader.<FXFListDialogController>getController();
+            
+            dlgc.setHeader(header);
+            dlgc.setStatus(dmb);
+            AnchorPane ap = (AnchorPane)currentdlgpane;
+            ap.setPrefHeight(dlgc.getDlg_height());
+            
+            inputdialog.getChildren().add(currentdlgpane);
+            inputdialog.setVisible(true);
+            //inputdialog.setPrefHeight(400);
+            return dlgc.result;
+      
+        } catch (IOException ex) {
+            Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return null;
+    }
+    
+    
+    
+    
+    
     
     
     

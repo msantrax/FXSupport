@@ -9,26 +9,39 @@ import static com.opus.fxsupport.FXFWindowManager.stage;
 import com.opus.syssupport.ActivitiesMap;
 import com.opus.syssupport.ActivityDescriptor;
 import com.opus.syssupport.PicnoUtils;
+import com.opus.syssupport.ProfileResources;
 import com.opus.syssupport.VirnaServiceProvider;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.effect.BoxBlur;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -88,9 +101,12 @@ public class FXFWindowManager {
         
         TextFlow tfa;
         
-        tfa = buildNotification (source, type,message, tip);
+        tfa = buildNotification (source, type, message, tip);
         notifications.add(tfa);
         getHeaderBand().updateNotificationIcon(notifications.size());
+        if (type.equals("SEVERE")){
+            getHeaderBand().showSnack(message);
+        }
         
     }
     
@@ -244,30 +260,176 @@ public class FXFWindowManager {
     public FXFControllerInterface getActiveRoot(){ return activefxcontroller; }
     
     
-    public void activateWindow(String id) throws IOException{
+    public void test1()throws Exception{
         
-        Pane rootpane;
+        ProfileResources prs = PicnoUtils.profile_resources;
+        LauncherConfig lc = PicnoUtils.launcherconfig;
+        ArrayList<LauncherItem> lit = PicnoUtils.launcherconfig.getItems();
+        
+        
+        loadWindow (lit.get(0));
+        loadWindow (lit.get(1));
+        loadWindow (lit.get(2));
+        loadWindow (lit.get(4));
+        
+        LOG.info(String.format("Auto Loading launchers finalized"));
+        
+    }
+    
+    
+    private void loadWindow (LauncherItem li){
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                try {
+                    LOG.info(String.format("Auto Loading activity %s", li.getIconlabel()));
+                    activateWindow(li.getConfigid(), li , false);
+                } catch (IOException ex) {
+                    Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+    }
+    
+    
+    public void cycleActivity(){
+        
+        if (acvtring.isEmpty()) return;
+        
+        LauncherItem li = acvtring.pop();
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                try {
+                    activateWindow(li.getConfigid(), li , true);
+                } catch (IOException ex) {
+                    Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                acvtring.addLast(li);
+            }
+        });
+    }
+    
+    private ObservableList<Rectangle> list = FXCollections.<Rectangle>observableArrayList();
+    public void showActivityList(){
+        
+        if (acvtring.isEmpty()) return;
+        AnchorPane acvtlist = headerband.getAcvtList();
+        
+        
+        if (acvtlist.isVisible()){
+            acvtlist.setVisible(false);
+        }
+        else{
+            HBox snap_box = headerband.getSnapBox();
+            snap_box.getChildren().clear();
+            list.clear();
+            for (LauncherItem li : acvtring){
+                FXFWindowDescriptor wd = getCanvasesmap().get(li.getConfigid());
+                if (wd != null){
+                    if (wd.getSnapshot() == null){
+                        LOG.info(String.format("Doing snapshot on %s", li.getIconlabel()));
+                        WritableImage image = wd.getRootpane().snapshot(new SnapshotParameters(), null);
+                        Rectangle rectangle = new Rectangle(0, 0, 220, 120);
+                        ImagePattern pattern = new ImagePattern(image);
+                        rectangle.setFill(pattern);
+                        rectangle.setUserData(li.getConfigid());
+                        wd.setSnapshot(rectangle);
+                        rectangle.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent e) {
+                                String window = (String)rectangle.getUserData();
+                                try {
+                                    if (e.getButton().equals(MouseButton.PRIMARY)){
+                                        LOG.info(String.format("Select window action on : %s", window));
+                                        activateWindow(window, null, true);
+                                    }
+                                    else{
+                                        LOG.info(String.format("Delete window action on : %s", window));
+                                        deleteWindow(window);
+                                    }
+                                } catch (Exception ex) {
+                                    Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                acvtlist.setVisible(false);
+                            }
+                        });
+                    }
+                    list.add(wd.getSnapshot());
+                    snap_box.getChildren().add(wd.getSnapshot());
+                }
+            } 
+            acvtlist.setVisible(true);
+        }
+    }
+    
+    public void deleteWindow (String id) throws Exception{
         
         FXFWindowDescriptor wd = getCanvasesmap().get(id);
         
         if (wd != null){
+            if (activefxcontroller.equals(wd.getFxcontroller())){
+                LOG.info(String.format("Window %s is active now", id));
+                activateWindow("CANVAS", null, true);
+            }
+            
+            LOG.info(String.format("Deleting window %s", id));
+            LauncherItem lit = wd.getLauncheritem();
+            acvtring.remove(lit);
+            
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(wd.getUrl());
+            fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
+            wd.setLoader(fxmlLoader);
+            
+            Constructor c = wd.getControllerclass().getConstructor(FXMLLoader.class, String.class);
+            FXFControllerInterface fxfc = (FXFControllerInterface)c.newInstance(fxmlLoader, wd.getLauncheritem().getArgument());        
+            wd.setFxcontroller(fxfc);
+            fxmlLoader.setController(fxfc);  
+            wd.setLoaded(false);
+            
+            
+        }
+        
+        
+    }
+    
+    
+    ArrayDeque<LauncherItem> acvtring = new ArrayDeque<>();
+    
+    public void activateWindow(String id, LauncherItem li , boolean show) throws IOException{
+        
+        Pane rootpane;
+        
+        FXFWindowDescriptor wd = getCanvasesmap().get(id);
+    
+        if (wd != null){
             if (wd.isLoaded()){
+                
+                if (activefxcontroller.equals(wd.getFxcontroller())) return;
+                
                 LOG.info(String.format("===== Loaded WD id = %s", id));
                 wd.getHeaderband().updateNotificationIcon(notifications.size());
                 headerband = wd.getHeaderband();
                 activefxcontroller = wd.getFxcontroller();
                 activefxcontroller.activateModel();
                 
-                stage.setScene(wd.getScene());
-//                stage.setFullScreen(true);
-//                stage.setFullScreenExitHint("");
+                if (show){
+                    stage.setScene(wd.getScene());
+    //                stage.setFullScreen(true);
+    //                stage.setFullScreenExitHint("");
+                    stage.show();
+                }
                 
-                stage.show();
             }
             else{
                 LOG.info(String.format("===== NOT Loaded WD id = %s", id));
                 if (wd.getLoader() != null){
                     rootpane = (wd.getLoader().load(wd.getUrl().openStream()));
+                    
                 }
                 else{
                     rootpane = ((Pane)wd.getFxcontroller());
@@ -276,6 +438,7 @@ public class FXFWindowManager {
                 wd.getFxcontroller().setAppController(ctrl);
                 activefxcontroller = wd.getFxcontroller();
                 activefxcontroller.activateModel();
+                activefxcontroller.setLauncher(li);
                 
                 headerband = new FXFHeaderband();
                 headerband.setAppController(ctrl);
@@ -303,12 +466,17 @@ public class FXFWindowManager {
                 wd.getFxcontroller().update(scene);
                 wd.setLoaded(true);
                 
+                if (!id.equals("CANVAS")){
+                    acvtring.push(li);
+                }
                 
-                stage.setScene(scene);
-                //stage.setFullScreen(true);
-                //stage.setFullScreenExitHint("");
+                if (show){
+                    stage.setScene(scene);
+                    //stage.setFullScreen(true);
+                    //stage.setFullScreenExitHint("");
+                    stage.show();
+                }
                 
-                stage.show();   
             }
         }
         else{
@@ -317,6 +485,8 @@ public class FXFWindowManager {
         }
         
     }
+    
+    
     
     
     public void updateWindow(String id){  
@@ -335,9 +505,6 @@ public class FXFWindowManager {
         }
         
     }
-    
-    
-    
     
     
     
@@ -446,19 +613,17 @@ public class FXFWindowManager {
     
     
     
-    
-    public String showInputDialog(String header, String defaultvalue){
+    public String showFormulaEditorDialog(FXFFieldDescriptor fxfd){
         
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFInputDialog.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFFormulaEditor.fxml"));
             Parent parent = fxmlLoader.load();
-            FXFInputDialogController ICController = fxmlLoader.<FXFInputDialogController>getController();
+            FXFFormulaEditorController ICController = fxmlLoader.<FXFFormulaEditorController>getController();
             
             
             Scene scene = new Scene(parent); 
             scene.setFill(Color.TRANSPARENT);
             scene.getStylesheets().add("com/opus/fxsupport/fxfsupport.css");
-            
             
             Stage dlgstage = new Stage(StageStyle.TRANSPARENT);            
             dlgstage.initModality(Modality.WINDOW_MODAL);
@@ -466,8 +631,7 @@ public class FXFWindowManager {
             
             dlgstage.setScene(scene);
             ICController.setStage(dlgstage);
-            ICController.setHeader(header);
-            ICController.setDefvalue(defaultvalue);
+            ICController.setPayload(fxfd);
             
             //stage.getScene().getRoot().setEffect(new BoxBlur());
             dlgstage.showAndWait();
@@ -478,12 +642,53 @@ public class FXFWindowManager {
             Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return "FXFInputDialog failed";
+        return "FXFFormulaEditor failed";
     }
+    
+    
+    
   
     
     
 }
+
+
+//public String showInputDialog(String header, String defaultvalue){
+//        
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXFInputDialog.fxml"));
+//            Parent parent = fxmlLoader.load();
+//            FXFInputDialogController ICController = fxmlLoader.<FXFInputDialogController>getController();
+//            
+//            
+//            Scene scene = new Scene(parent); 
+//            scene.setFill(Color.TRANSPARENT);
+//            scene.getStylesheets().add("com/opus/fxsupport/fxfsupport.css");
+//            
+//            
+//            Stage dlgstage = new Stage(StageStyle.TRANSPARENT);            
+//            dlgstage.initModality(Modality.WINDOW_MODAL);
+//            dlgstage.initOwner(stage);
+//            
+//            dlgstage.setScene(scene);
+//            ICController.setStage(dlgstage);
+//            ICController.setHeader(header);
+//            ICController.setDefvalue(defaultvalue);
+//            
+//            //stage.getScene().getRoot().setEffect(new BoxBlur());
+//            dlgstage.showAndWait();
+//            
+//            return "";
+//            
+//        } catch (IOException ex) {
+//            Logger.getLogger(FXFWindowManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return "FXFInputDialog failed";
+//    }
+//
+
+
 
 
 

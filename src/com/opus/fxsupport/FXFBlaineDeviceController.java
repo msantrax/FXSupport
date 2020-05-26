@@ -79,8 +79,10 @@ public class FXFBlaineDeviceController extends AnchorPane implements Initializab
 
   
     private FXFFieldDescriptor fxfd;
+    
     private FXFFieldDescriptor analisefd;
     private FXFTextField analisefield;
+    
     private FXFFieldDescriptor rsdfd;
     private FXFTextField rsdfield;
     
@@ -171,8 +173,7 @@ public class FXFBlaineDeviceController extends AnchorPane implements Initializab
                 led_final.getStyleClass().add("fxf-ledfinal-off");
             }
         }
-        
-        
+   
     }
     
     
@@ -229,7 +230,11 @@ public class FXFBlaineDeviceController extends AnchorPane implements Initializab
                 }
             }    
         });        
-        
+    }
+    
+    
+    public void enableRun (boolean enable){
+        sidebar_btrun.setDisable(!enable);
     }
     
     
@@ -253,18 +258,22 @@ public class FXFBlaineDeviceController extends AnchorPane implements Initializab
         this.rsdfd = rsd;
         //this.rsdfield = rsdfd.getField(FXFTextField.class);
         
-        
-        LinkedTreeMap ltm = (LinkedTreeMap)fxfd.getCustom();
-        bfd = new BlaineFieldDescriptor();
-        if (ltm.size() != 0){
-            Gson gson = new Gson();
-            JsonObject jobj = gson.toJsonTree(ltm).getAsJsonObject();
-            bfd.setOpmode(jobj.get("opmode").getAsString());
-            bfd.setMaxruns(jobj.get("maxruns").getAsInt());
-            bfd.setSkipfirst(jobj.get("skipfirst").getAsBoolean());
-            bfd.setInterrun(jobj.get("interrun").getAsDouble());
-            bfd.setAn_timeout(jobj.get("an_timeout").getAsDouble());
-            bfd.setAuto_timeout(jobj.get("auto_timeout").getAsDouble());
+        if (fxfd.getCustom() instanceof LinkedTreeMap){
+            LinkedTreeMap ltm = (LinkedTreeMap)fxfd.getCustom();
+            bfd = new BlaineFieldDescriptor();
+            if (ltm.size() != 0){
+                Gson gson = new Gson();
+                JsonObject jobj = gson.toJsonTree(ltm).getAsJsonObject();
+                bfd.setOpmode(jobj.get("opmode").getAsString());
+                bfd.setMaxruns(jobj.get("maxruns").getAsInt());
+                bfd.setSkipfirst(jobj.get("skipfirst").getAsBoolean());
+                bfd.setInterrun(jobj.get("interrun").getAsDouble());
+                bfd.setAn_timeout(jobj.get("an_timeout").getAsDouble());
+                bfd.setAuto_timeout(jobj.get("auto_timeout").getAsDouble());
+            }
+        }
+        else{
+            bfd = (BlaineFieldDescriptor)fxfd.getCustom();
         }
         
         updateProfile();
@@ -351,7 +360,7 @@ public class FXFBlaineDeviceController extends AnchorPane implements Initializab
             @Override
             public void handle(MouseEvent e) {
                 if (e.getButton() == MouseButton.SECONDARY) {
-                    LOG.info(String.format("Blaine mode setup requested @ %f/%f",  e.getScreenX(), e.getScreenY()));                    
+                    //LOG.info(String.format("Blaine mode setup requested @ %f/%f",  e.getScreenX(), e.getScreenY()));                    
                     ContextMenu ctxm = getModeMenu(runlist, fxfd);
                     ctxm.show(runlist, e.getScreenX(), e.getScreenY());
                     e.consume();

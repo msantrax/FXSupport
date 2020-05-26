@@ -5,20 +5,15 @@
  */
 package com.opus.fxsupport;
 
-import static com.opus.fxsupport.BlaineDevice.timestamp_format;
-import com.opus.fxsupport.FXFControllerInterface;
-import com.opus.fxsupport.FXFCountdownTimer;
 import com.opus.syssupport.SMTraffic;
 import com.opus.syssupport.VirnaPayload;
 import com.opus.syssupport.VirnaServiceProvider;
 import com.opus.syssupport.smstate;
-import java.time.Duration;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Random;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
-import org.reactfx.util.FxTimer;
 import org.reactfx.util.Timer;
 
 /**
@@ -57,7 +52,9 @@ public class BlaineDevice {
     
     
     public BlaineDevice() {
-      
+        updatemap.put("FX1", "UPDATEANTIME");
+        updatemap.put("FX2", "UPDATECALTIME");
+        updatemap.put("FX5", "UPDATEYARATIME");
     }
     
     // Application controller link 
@@ -116,9 +113,14 @@ public class BlaineDevice {
     public boolean st_doRun(SMTraffic smm){
         log.info(String.format("Doing new run   ==========================================================="));
         if (bfd.getOpmode().equals("Operação Manual") || getRun_number() < max_runs){
-            ctrl.processSignal(new SMTraffic(0l, 0l, 0, "CALLINTERRUN", this.getClass(), new VirnaPayload()));
+            
+            //ctrl.processSignal(new SMTraffic(0l, 0l, 0, "CALLINTERRUN", this.getClass(), new VirnaPayload()));
+            ctrl.processSignal(new SMTraffic(0l, 0l, 0, "UPDATERUN", this.getClass(), new VirnaPayload()));
+            
             setRun_number((Integer) (getRun_number() + 1));
         }
+        
+        
         return true;
     }
     
@@ -129,19 +131,26 @@ public class BlaineDevice {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                anct.getRunControl().addEntry(160 + ((rand.nextDouble()-0.5)*10), "Normal");
+                anct.getRunControl().addEntry(4 + ((rand.nextDouble()-0.5) * 0.2), "Normal");
             }
         });
         
         return true;
     }
     
+    //String[] result = new String[]{"a"}; 
+    
+    
+    private static LinkedHashMap<String,String> updatemap = new LinkedHashMap<>();
+    
     
     @smstate (state = "ENDRUN")
     public boolean st_endRun(SMTraffic smm){
         log.info(String.format("ENDING -  run"));
   
-        ctrl.processSignal(new SMTraffic(0l, 0l, 0, "UPDATETIME", this.getClass(), smm.getPayload()));
+        String ctrltype = updatemap.get(anct.getUID());
+        ctrl.processSignal(new SMTraffic(0l, 0l, 0, ctrltype, this.getClass(), smm.getPayload()));
+        
         FXFBlaineDeviceController bdv = anct.getBlaineDevice();
         
         if (bfd.getOpmode().equals("Operação Manual")){

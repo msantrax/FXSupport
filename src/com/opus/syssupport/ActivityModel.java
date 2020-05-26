@@ -24,8 +24,8 @@ public class ActivityModel {
     
     protected Profile profile;
   
-    protected LinkedHashMap<String,PropertyLinkDescriptor>ana_proplink_uimap;
-    protected LinkedHashMap<String,PropertyLinkDescriptor>ana_proplink_modelmap;
+    protected LinkedHashMap<String,PropertyLinkDescriptor>proplink_uimap;
+    protected LinkedHashMap<String,PropertyLinkDescriptor>proplink_modelmap;
     
     
     
@@ -68,20 +68,20 @@ public class ActivityModel {
         this.fxctrl = fxctrl;
     }
     
-    public LinkedHashMap<String,PropertyLinkDescriptor> getAna_proplink_uimap() {
-        return ana_proplink_uimap;
+    public LinkedHashMap<String,PropertyLinkDescriptor> getProplink_uimap() {
+        return proplink_uimap;
     }
 
-    public void setAna_proplink_uimap(LinkedHashMap<String,PropertyLinkDescriptor> ana_proplink_uimap) {
-        this.ana_proplink_uimap = ana_proplink_uimap;
+    public void setProplink_uimap(LinkedHashMap<String,PropertyLinkDescriptor> proplink_uimap) {
+        this.proplink_uimap = proplink_uimap;
     }
 
-    public LinkedHashMap<String,PropertyLinkDescriptor> getAna_proplink_modelmap() {
-        return ana_proplink_modelmap;
+    public LinkedHashMap<String,PropertyLinkDescriptor> getProplink_modelmap() {
+        return proplink_modelmap;
     }
 
-    public void setAna_proplink_modelmap(LinkedHashMap<String,PropertyLinkDescriptor> ana_proplink_modelmap) {
-        this.ana_proplink_modelmap = ana_proplink_modelmap;
+    public void setProplink_modelmap(LinkedHashMap<String,PropertyLinkDescriptor> proplink_modelmap) {
+        this.proplink_modelmap = proplink_modelmap;
     }
     
     

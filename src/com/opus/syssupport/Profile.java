@@ -6,6 +6,7 @@
 package com.opus.syssupport;
 
 import com.opus.fxsupport.FXFFieldDescriptor;
+import com.opus.fxsupport.LauncherItem;
 import java.util.ArrayList;
 
 
@@ -13,6 +14,7 @@ public class Profile extends JsonHeader{
     
     protected String label;
     
+    protected transient LauncherItem launcher;
     
     protected ArrayList<String>report_template;
     protected String csv_file;
@@ -36,6 +38,21 @@ public class Profile extends JsonHeader{
         report_template.add("pdf1.pdf");
         label="Profile";
    
+    }
+    
+    public void updateArgument(String newarg){
+        
+        String[] tokens = argument.split(":");
+        if (tokens.length == 2){
+            tokens[1] = newarg;
+            argument = tokens[0]+":"+tokens[1];
+        }
+        else{
+            argument = newarg;
+        }
+        
+        
+        
     }
     
     
@@ -81,6 +98,14 @@ public class Profile extends JsonHeader{
         
         descriptors.clear();
         
+    }
+
+    public LauncherItem getLauncher() {
+        return launcher;
+    }
+
+    public void setLauncher(LauncherItem launcher) {
+        this.launcher = launcher;
     }
     
     

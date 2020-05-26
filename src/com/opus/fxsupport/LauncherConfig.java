@@ -90,7 +90,18 @@ public class LauncherConfig extends JsonHeader{
     }
 
     
-    
+    public void updateItem (LauncherItem uli){
+        
+        String uid = uli.getConfigid();
+        
+        for (LauncherItem li : items){
+            if (li.getConfigid().equals(uid)){
+                items.remove(li);
+                items.add(uli);
+                return;
+            }
+        }
+    }
     
     
     public LauncherConfig() {

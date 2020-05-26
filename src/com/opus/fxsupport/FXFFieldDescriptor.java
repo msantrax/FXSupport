@@ -39,7 +39,6 @@ public class FXFFieldDescriptor {
     protected Object custom = new Object();
     protected String custom_classtype = "";
     
-    
     private String format = "%5.2f";
     protected String unit = "";
     private String default_value = "0.0";
@@ -56,6 +55,11 @@ public class FXFFieldDescriptor {
     protected transient FXFValidator validator;
     protected transient AutoCompletionBinding<String> acbinding;
     protected transient ArrayList<String> acbindinglist;
+    
+    protected boolean useformula = false;
+    protected String formulafile = "";
+    protected transient ArrayList<String> formulalist;
+    
     
     public FXFFieldDescriptor() {
         
@@ -321,6 +325,30 @@ public class FXFFieldDescriptor {
 
     public void setCustom_classtype(String custom_classtype) {
         this.custom_classtype = custom_classtype;
+    }
+
+    public boolean isUseformula() {
+        return useformula;
+    }
+
+    public void setUseformula(boolean useformula) {
+        this.useformula = useformula;
+    }
+
+    public String getFormulafile() {
+        return formulafile;
+    }
+
+    public void setFormulafile(String formulafile) {
+        this.formulafile = formulafile;
+    }
+
+    public ArrayList<String> getFormulalist() {
+        return formulalist;
+    }
+
+    public void setFormulalist(ArrayList<String> formulalist) {
+        this.formulalist = formulalist;
     }
 
     

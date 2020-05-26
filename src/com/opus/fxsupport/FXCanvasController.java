@@ -882,23 +882,23 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
     
     
     
-    private GlyphIcon buildGlyph(String configid){
-        
-        GlyphIcon gi = GlyphsBuilder.getAwesomeGlyph(FontAwesomeIcon.SEARCH, "black", 6);
-        //gi.getStyleClass().add("fxf-lauchicon");
-        gi.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override 
-            public void handle(MouseEvent event) {
-                LOG.info(String.format("Launch Icon %s called ...", configid));
-                try {
-                    wm.activateWindow(configid);
-                } catch (IOException ex) {
-                    Logger.getLogger(FXCanvasController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }  
-        });
-        return gi; 
-    }
+//    private GlyphIcon buildGlyph(String configid){
+//        
+//        GlyphIcon gi = GlyphsBuilder.getAwesomeGlyph(FontAwesomeIcon.SEARCH, "black", 6);
+//        //gi.getStyleClass().add("fxf-lauchicon");
+//        gi.setOnMouseClicked(new EventHandler<MouseEvent>(){
+//            @Override 
+//            public void handle(MouseEvent event) {
+//                LOG.info(String.format("Launch Icon %s called ...", configid));
+//                try {
+//                    wm.activateWindow(configid, li);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(FXCanvasController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }  
+//        });
+//        return gi; 
+//    }
     
     private Label buildCleanButton (LauncherItem li){
         
@@ -914,7 +914,7 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
             public void handle(MouseEvent event) {
                 LOG.info(String.format("Launch Icon %s called ...", li.getConfigid()));
                 try {
-                    wm.activateWindow(li.getConfigid());
+                    wm.activateWindow(li.getConfigid(), li, true);
                 } catch (IOException ex) {
                     Logger.getLogger(FXCanvasController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -970,9 +970,10 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
                 }
                 else{
                     try {
-                        wm.activateWindow(li.getConfigid());
+                        wm.activateWindow(li.getConfigid(), li, true);
                     } catch (IOException ex) {
-                        Logger.getLogger(FXCanvasController.class.getName()).log(Level.SEVERE, null, ex);
+                        LOG.severe(String.format("Canvas Controller failed to launch due :  %s", ex.getMessage()));
+                        //Logger.getLogger(FXCanvasController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     e.consume();
                 }
@@ -1047,6 +1048,16 @@ public class FXCanvasController extends AnchorPane implements com.opus.fxsupport
     @Override
     public FXFBlaineDeviceController getBlaineDevice() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLauncher(LauncherItem li) {
+        
+    }
+
+    @Override
+    public LauncherItem getLauncher() {
+        return null;
     }
     
     

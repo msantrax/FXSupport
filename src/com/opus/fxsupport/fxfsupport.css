@@ -30,13 +30,13 @@
 
 
 .fxf-fx1banner{
-    -fx-border-color : white;
+    -fx-border-color : transparent;
     /*-fx-background-color: linear-gradient(from 50% 100% to 50% 50% , #1e90ff, #0000cd 100% );*/
     -fx-background-color: #2680b4;
 }
 
 .fxf-fx2banner{
-    -fx-border-color : white;
+    -fx-border-color : transparent;
     -fx-background-color: #46ad1a;
     /*-fx-background-color: linear-gradient(from 50% 100% to 50% 50% , #7cfc00, #008000 100% );*/
 }
@@ -44,6 +44,12 @@
 .fxf-fx3banner{
     -fx-border-color : transparent;
     -fx-background-color: #ef9a18;
+    /*-fx-background-color: linear-gradient(from 50% 100% to 50% 50% , #ff8c00, #8b4513 100% );*/
+}
+
+.fxf-fx5banner{
+    -fx-border-color : transparent;
+    -fx-background-color: #483D8B;
     /*-fx-background-color: linear-gradient(from 50% 100% to 50% 50% , #ff8c00, #8b4513 100% );*/
 }
 
@@ -116,7 +122,11 @@
     -fx-font-size: 18px;
 }
 
-
+.fxf-qdlg{
+    -fx-font-family: "Lato-Reg";
+    -fx-font-size: 12px;
+    
+}
 
 
 
@@ -223,6 +233,19 @@
 }
 
 .fxf-label-field:hover {
+    -fx-border-color : transparent transparent black transparent;
+    -fx-effect: dropshadow(three-pass-box, gray, 10.0, 0, 5.0, 5.0);
+}
+
+.fxf-biglabel-field {
+    -fx-border-color : white white -fx-text-box-border white;
+    -fx-background-color: white;
+    -fx-font-family: "Lato-Bold";
+    -fx-font-size: 28px;
+    /*-fx-background-color: linear-gradient(to top, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);*/ 
+}
+
+.fxf-biglabel-field:hover {
     -fx-border-color : transparent transparent black transparent;
     -fx-effect: dropshadow(three-pass-box, gray, 10.0, 0, 5.0, 5.0);
 }
@@ -382,8 +405,8 @@
 
 .modal-dialog {
    /*-fx-background-color: linear-gradient(to bottom, lightyellow, derive(white, 20%));*/ 
-   -fx-background-radius: 30;
-   -fx-border-color: black;
+/*   -fx-background-radius: 30;
+   -fx-border-color: black;*/
    /*-fx-effect: innershadow(three-pass-box, black, 4.0, 0, 0.0, 0.0);*/
    /*-fx-effect: dropshadow(three-pass-box, black, 10.0, 0, 5.0, 5.0);*/
    

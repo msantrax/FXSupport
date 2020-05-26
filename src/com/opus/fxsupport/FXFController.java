@@ -5,6 +5,7 @@
  */
 package com.opus.fxsupport;
 
+import com.opus.syssupport.FormulaResources;
 import com.opus.syssupport.PicnoUtils;
 import com.opus.syssupport.SMTraffic;
 import com.opus.syssupport.VirnaPayload;
@@ -51,8 +52,11 @@ public class FXFController implements FXFControllerInterface {
     protected int outfocus_counter = 0;
     
     protected String profileid;
-
+    protected LauncherItem launcher;
+    
     public static VirnaServiceProvider sctrl;
+    
+    
     
     
     public FXFController() {
@@ -260,7 +264,58 @@ public class FXFController implements FXFControllerInterface {
         }
     }
     
-    
+    public static void updateFormulas(FXFFieldDescriptor fxfd, ArrayList<String> values){
+        
+        String acfile;
+        
+        if (fxfd.isUseformula()){
+            acfile = fxfd.getFormulafile();
+            if (acfile != null && !acfile.isEmpty()){
+                try {
+                    if (values != null){
+                        fxfd.setFormulalist(values);
+                        PicnoUtils.saveAuxJson(acfile, values, true);
+                    }
+                    else{
+                        fxfd.setFormulalist(PicnoUtils.loadAuxJson(acfile, ArrayList.class));
+                        FormulaResources.getInstance().addFormula(fxfd);
+                    }
+                } catch (IOException ex) {
+                    LOG.warning(String.format("AuxJson unable to load formulas from %s due %s - using default list instead", 
+                                                                acfile, ex.getMessage()));
+                }
+            }
+            else{
+                acfile = PicnoUtils.getAutoFilenameJson("form_");
+                try {
+                    if (values == null){
+                        values = new ArrayList<String>();
+                        //values.add("#Insira aqui suas formulas de calculo");
+                        values.add("#Formulas de cálculo para analise Yara - parametro SSA :");
+                        values.add("# Os seguintes argumentos estão disponíveis para uso :");
+                        values.add("#\taltura \u003d campo altura da amostra (via micrometro)");
+                        values.add("#\tdensidade \u003d densidade");
+                        values.add("#\tpeso \u003d peso da mostra");
+                        values.add("#\ttemperatura \u003d temperatura do ensaio (via sensor)");
+                        values.add("#\tescoamento \u003d média das amostragens.");
+                        values.add("");
+                    }
+                    fxfd.setFormulalist(values);
+                    PicnoUtils.saveAuxJson(acfile, values, true);
+                    fxfd.setFormulafile(acfile);
+                    FormulaResources.getInstance().addFormula(fxfd);
+                    
+                } catch (IOException ex) {
+                    LOG.warning(String.format("AuxJson unable to load formulas from %s due %s - using default instead", acfile, ex.getMessage()));
+                }
+            }
+//            if (fxfd.getAcbinding() != null){
+//                fxfd.getAcbinding().dispose();
+//            }
+//            fxfd.setAcbinding(TextFields.bindAutoCompletion((TextField)fxfd.getField(FXFField.class), fxfd.getAcbindinglist()));  
+        }
+        
+    }
     
     public static MenuItem getContextMenuLabel (String mes, boolean title){
         
@@ -532,6 +587,17 @@ public class FXFController implements FXFControllerInterface {
 
     public void setScene(Scene scene) {
         this.scene = scene;
+    }
+
+    @Override
+    public LauncherItem getLauncher() {
+        return launcher;
+    }
+
+    @Override
+    public void setLauncher(LauncherItem launcher) {
+        this.launcher = launcher;
+        
     }
     
     

@@ -14,7 +14,7 @@ public class SMTraffic {
     protected Long handle;
     private String state;
     private VirnaPayload payload;
-    private Class caller;
+    protected Class caller;
 
     
     public SMTraffic( Long addr, String command, int code, String state, Class caller, VirnaPayload payload) {
@@ -96,6 +96,10 @@ public class SMTraffic {
      */
     public void setHandle(Long handle) {
         this.handle = handle;
+    }
+
+    public Class getCaller() {
+        return caller;
     }
     
 }    

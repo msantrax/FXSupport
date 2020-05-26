@@ -67,8 +67,8 @@ public class ActivityMachine {
                                                 .setCallstate(plink.callstate())
                                                 ;
                 
-                am.getAna_proplink_uimap().put(plink.plink(), linkdesc);
-                am.getAna_proplink_modelmap().put(plink.propname(), linkdesc);
+                am.getProplink_uimap().put(plink.plink(), linkdesc);
+                am.getProplink_modelmap().put(plink.propname(), linkdesc);
             }
         }
         log.info("Prop map done !");

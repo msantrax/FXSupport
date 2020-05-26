@@ -7,11 +7,17 @@ package com.opus.syssupport;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.opus.fxsupport.LauncherConfig;
+import com.opus.fxsupport.LauncherItem;
+import static com.opus.syssupport.PicnoUtils.loadJson;
+import com.sun.javafx.logging.PlatformLogger.Level;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
@@ -35,6 +41,82 @@ public class ProfileResources {
         //default_profile = Profile.getInstance();
         scanProfiles(PicnoUtils.PUBLIC_PREFIX + "/Profiles/");
         
+    }
+    
+    
+    public ArrayList<LauncherItem> getUseMap(Profile prof){
+        
+        ArrayList<LauncherItem> umap = new ArrayList<>();
+        Collection<String> laucherset = PicnoUtils.launchers.values();
+        
+        for (String lch : laucherset){
+            try {
+                LauncherConfig lcfg =  loadJson (lch, LauncherConfig.class);
+                //LOG.info(String.format("Scanning launcher @ %s", lch));
+                ArrayList<LauncherItem> items = lcfg.getItems();
+                for (LauncherItem li : items){
+                    String arg = li.getArgument();
+                    //LOG.info(String.format("Launcher %s has entry %s", lch, arg));
+                    if (arg != null && (arg.equals(prof.getArgument()))){
+                        umap.add(li);
+                    }
+                }
+            } catch (IOException ex) {
+                LOG.severe("Failed to build profile map use");
+                return null;
+            }
+        }
+        return umap;
+    }
+    
+    
+    public Profile removeResource(Profile prof){
+        
+        ProfileResource pr = getByLabel(prof.getLabel());
+        String path = pr.getFpath();
+        Path p = Paths.get(path);
+        Profile nprof;
+        
+        String pclass = prof.getArgument().split(":")[0];
+        pclass = pclass+":default";
+        ProfileResource npr = getResource(pclass);
+        if (npr == null) return null;
+        try {
+             nprof = npr.getProfile(prof.getClass());
+             if (nprof == null ) return null;
+             prof = nprof;
+             
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(ProfileResources.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return null;
+        }
+          
+        try {
+            Files.deleteIfExists(p);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ProfileResources.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);  
+        }
+        
+        return nprof;
+    }
+    
+    
+    
+    public String cloneResource (Profile prof){
+        
+        String sout = PicnoUtils.PUBLIC_PREFIX + "/Profiles/" + PicnoUtils.getAutoFilenameJson("");
+        
+        try {
+            PicnoUtils.saveJson (sout, prof, true);
+            ProfileResource pfr = new ProfileResource(sout, prof.getArgument(), prof.getClasstype(),  prof.getLabel());
+            resources.add(pfr);
+        } catch (IOException ex) {
+            LOG.severe(String.format("Failed to save profile @ %s", sout));
+            return null;
+        }
+        
+        return sout;
     }
     
     

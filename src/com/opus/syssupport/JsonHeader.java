@@ -31,7 +31,7 @@ public class JsonHeader {
         this.id = id;
     }
 
-        private String argument = "";
+        protected String argument = "";
 
     public String getArgument() {
         return argument;

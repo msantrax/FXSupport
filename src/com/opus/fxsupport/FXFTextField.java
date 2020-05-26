@@ -148,6 +148,21 @@ public class FXFTextField extends CustomTextField implements FXFField{
                         refreshField(field,fxfd);
                     });
                 }
+                else if (fxfd.isUseformula()){
+                    MenuItem formedit = new MenuItem("Editar Formula");
+                    formedit.setOnAction((event) -> {
+                        ctxm.hide();
+                        FXFWindowManager wm = FXFWindowManager.getInstance();
+                        String result = wm.showFormulaEditorDialog(fxfd);
+                        if(result != null && !result.equals("cancel")){
+                            //LOG.info(String.format("ACEditor returned : %s", result));
+                            FXFController.updateFormulas(fxfd, fxfd.getFormulalist());
+                            refreshField(field,fxfd);
+                        }
+                    });
+                    menuitems.add(formedit);
+                }
+                
                 
                 TextField  unit = FXFController.addContextValidatedTextField (menuitems, 
                         "Unidade de medida", "", fxfd.getUnit());

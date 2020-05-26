@@ -48,8 +48,6 @@ public class LauncherItem {
     }
 
     
-    
-    
         private String iconlabel;
 
     public String getIconlabel() {

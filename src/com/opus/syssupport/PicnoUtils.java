@@ -91,7 +91,8 @@ public class PicnoUtils {
     }
     
     public static String getAutoFilenameJson(String prefix){
-        return String.format(PicnoUtils.jsonautofile_format,Calendar.getInstance());
+        
+        return prefix + String.format(PicnoUtils.jsonautofile_format,Calendar.getInstance());
     }
     
     public static String getAutoFilename(){
@@ -135,7 +136,6 @@ public class PicnoUtils {
 
         return content;
     }
-    
     
     
     public static String lastused_dir; 
@@ -334,9 +334,13 @@ public class PicnoUtils {
     }
     
     
+    public static void removeFile (String spath) throws IOException{
+        
+        Path p = Paths.get(spath);
+        File f = p.toFile();
     
-    
-    
+        Files.deleteIfExists(p);
+    }
     
     
     public static void enableSudo(String pass){
@@ -654,6 +658,8 @@ public class PicnoUtils {
             GsonBuilder builder = new GsonBuilder();
             builder.setPrettyPrinting();
             Gson gson = builder.create();
+            
+            launcherconfig.updateItem(li);
             String sjson = gson.toJson(launcherconfig);
             //log.info(sjson);
             PicnoUtils.saveJson(outpath, sjson);

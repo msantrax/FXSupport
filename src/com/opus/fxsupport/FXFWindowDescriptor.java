@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import com.opus.fxsupport.FXFControllerInterface;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -111,7 +111,16 @@ public class FXFWindowDescriptor {
     }
 
     
-    
+        private Rectangle snapshot;
+
+    public Rectangle getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(Rectangle snapshot) {
+        this.snapshot = snapshot;
+    }
+
     
     
         private Boolean loaded = false;
@@ -124,6 +133,16 @@ public class FXFWindowDescriptor {
         this.loaded = loaded;
     }
 
+    
+    
+    public void freeResource(){
+        fxcontroller = null;
+        headerband = null;
+        launcheritem = null;
+        loader = null;
+    }
+    
+    
     
     public FXFWindowDescriptor() {
         

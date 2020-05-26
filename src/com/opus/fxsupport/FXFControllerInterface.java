@@ -33,6 +33,8 @@ public interface FXFControllerInterface {
     public FXFCheckListViewNumber<String> getRunControl();
     public FXFCountdownTimer getCDT();
     public FXFBlaineDeviceController getBlaineDevice();
+    public void setLauncher(LauncherItem li);
+    public LauncherItem getLauncher();
     
     
     public SystemMenu getMenu(boolean isadm);

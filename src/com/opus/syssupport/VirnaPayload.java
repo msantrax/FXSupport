@@ -20,7 +20,7 @@ public class VirnaPayload {
     private Boolean flag1 = false;
     private Boolean flag2 = false;
     
-    private VirnaServiceProvider caller;
+    private Object caller;
     private String callerstate;
     private String servicestatus;
     
@@ -66,11 +66,11 @@ public class VirnaPayload {
         return this;
     }
 
-    public VirnaServiceProvider getCaller() {
+    public Object getCaller() {
         return caller;
     }
 
-    public VirnaPayload setCaller(VirnaServiceProvider caller) {
+    public VirnaPayload setCaller(Object caller) {
         this.caller = caller;
         return this;
     }

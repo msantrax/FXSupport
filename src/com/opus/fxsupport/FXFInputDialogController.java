@@ -5,16 +5,15 @@
  */
 package com.opus.fxsupport;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 /**
  *
@@ -37,18 +36,19 @@ public class FXFInputDialogController extends AnchorPane {
 
     
     
-    
     @FXML
     void cancel_action(ActionEvent event) {
-        result="";
-        closeStage(event);
+        result.set("cancel");
     }
 
     @FXML
     void ok_action(ActionEvent event) {
-        result= input_field.getText();
-        closeStage(event);
+        result.set(input_field.getText());
     }
+    
+    public SimpleStringProperty result = new SimpleStringProperty("");
+    
+    
     
     public FXFInputDialogController() {
          
@@ -57,7 +57,6 @@ public class FXFInputDialogController extends AnchorPane {
     
     @FXML
     void initialize() {
-        
         ok_button.setDisable(true);
     }
     
@@ -70,41 +69,43 @@ public class FXFInputDialogController extends AnchorPane {
         input_field.setText(defvalue);
         input_field.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable,
-                                        String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 ok_button.setDisable(false);
             }
         });
     }
     
     
-    private String result = "empty";
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    
-    
-    
-    
-    private Stage stage;
-    public void setStage (Stage stage) { this.stage = stage;}
-    
-    private void closeStage(ActionEvent event) {
-        Node  source = (Node)  event.getSource(); 
-        Stage lstage  = (Stage) source.getScene().getWindow();
-        lstage.close();
-    }
-    
-    private void closeStage() {
-        stage.close();
-    }
-    
-    
-    
 }
+
+
+//
+//    
+//    public String getResult() {
+//        return result;
+//    }
+//
+//    public void setResult(String result) {
+//        this.result = result;
+//    }
+//
+//    
+    
+
+
+
+//
+//    private Stage stage;
+//    public void setStage (Stage stage) { this.stage = stage;}
+//    
+//    private void closeStage(ActionEvent event) {
+//        Node  source = (Node)  event.getSource(); 
+//        Stage lstage  = (Stage) source.getScene().getWindow();
+//        lstage.close();
+//    }
+//    
+//    private void closeStage() {
+//        stage.close();
+//    }
+//    

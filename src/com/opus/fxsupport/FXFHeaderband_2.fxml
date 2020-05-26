@@ -84,15 +84,6 @@
             <Insets bottom="15.0" />
          </padding>
       </AnchorPane>
-      <AnchorPane fx:id="inputdialog" layoutX="476.0" layoutY="220.0" style="-fx-background-color: white; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, black, 10.0, 0, 0, 0);" visible="false" />
-      <AnchorPane fx:id="acvtlist" layoutX="617.0" layoutY="500.0" style="-fx-effect: dropshadow(three-pass-box, black, 10.0, 0, 5.0, 5.0);" visible="false">
-         <children>
-            <ScrollPane fx:id="acvt_scroll" hbarPolicy="ALWAYS" vbarPolicy="NEVER">
-               <content>
-                  <HBox fx:id="snap_box" alignment="CENTER" prefHeight="120.0" prefWidth="400.0" spacing="5.0" />
-               </content>
-            </ScrollPane>
-         </children>
-      </AnchorPane>
+      <AnchorPane fx:id="inputdialog" layoutX="476.0" layoutY="328.0" style="-fx-background-color: white; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, black, 10.0, 0, 0, 0);" visible="false" />
    </children>
 </fx:root>
